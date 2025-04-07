@@ -1,0 +1,392 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  
+  color-scheme: light dark;
+  color: #FFFFFF;
+  background-color: linear-gradient(180deg, #2A1B3D 0%, #0F172A 100%);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* Neon Color Palette */
+  --neon-teal: rgba(0, 210, 150, 1);
+  --neon-blue: rgba(30, 144, 255, 1);
+  --neon-cyan-blue: rgba(0, 220, 255, 1);
+  --neon-purple: rgba(120, 60, 220, 1);
+  --dark-bg: #0A0F1F;
+  --dark-bg-lighter: #111827;
+  
+  /* Layout */
+  --container-width: 1440px;
+  --container-percentage: 95%;
+  
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* Animations */
+  --animation-bounce: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  --animation-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  /* Shadows */
+  --shadow-small: 0 2px 5px rgba(0, 0, 0, 0.2);
+  --shadow-medium: 0 5px 15px rgba(0, 0, 0, 0.3);
+  --shadow-large: 0 10px 25px rgba(0, 0, 0, 0.4);
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  
+  /* Typography */
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --text-glow-teal: 0 0 8px rgba(0, 210, 150, 0.45), 0 0 16px rgba(0, 210, 150, 0.25), 0 0 24px rgba(0, 210, 150, 0.1);
+  --text-glow-blue: 0 0 8px rgba(30, 144, 255, 0.45), 0 0 16px rgba(30, 144, 255, 0.25), 0 0 24px rgba(30, 144, 255, 0.1);
+  --text-glow-cyan-blue: 0 0 8px rgba(0, 220, 255, 0.45), 0 0 16px rgba(0, 220, 255, 0.25), 0 0 24px rgba(0, 220, 255, 0.1);
+  --title-font-weight: 600;
+  --title-letter-spacing: -0.025em;
+  --subtitle-font-weight: 500;
+  --body-letter-spacing: 0.01em;
+  --title-gradient-teal-blue: linear-gradient(135deg, rgba(0, 210, 150, 1), rgba(30, 144, 255, 1));
+  --title-gradient-blue-cyan-blue: linear-gradient(135deg, rgba(30, 144, 255, 1), rgba(0, 220, 255, 1));
+  --title-gradient-teal-cyan-blue: linear-gradient(135deg, rgba(0, 210, 150, 1), rgba(0, 220, 255, 1));
+  
+  /* Neon Effects */
+  --neon-border-teal: 1px solid rgba(0, 210, 150, 0.3);
+  --neon-border-blue: 1px solid rgba(30, 144, 255, 0.3);
+  --neon-border-cyan-blue: 1px solid rgba(0, 220, 255, 0.3);
+  
+  --neon-glow-teal: 0 0 15px rgba(0, 210, 150, 0.2), 0 0 30px rgba(0, 210, 150, 0.1);
+  --neon-glow-blue: 0 0 15px rgba(30, 144, 255, 0.2), 0 0 30px rgba(30, 144, 255, 0.1);
+  --neon-glow-cyan-blue: 0 0 15px rgba(0, 220, 255, 0.2), 0 0 30px rgba(0, 220, 255, 0.1);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  background-color: var(--dark-bg);
+  color: #fff;
+  line-height: 1.6;
+  letter-spacing: var(--body-letter-spacing);
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+}
+
+.app {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+}
+
+/* Neon text effect */
+.neon-text-teal {
+  color: var(--neon-teal);
+  text-shadow: var(--text-glow-teal);
+}
+
+.neon-text-blue {
+  color: var(--neon-blue);
+  text-shadow: var(--text-glow-blue);
+}
+
+.neon-text-cyan-blue {
+  color: var(--neon-cyan-blue);
+  text-shadow: var(--text-glow-cyan-blue);
+}
+
+/* Keyword neon effect for important terms */
+.keyword {
+  background: linear-gradient(135deg, var(--neon-teal), var(--neon-cyan-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 8px var(--neon-teal-glow);
+  font-weight: 600;
+}
+
+/* Keyword neon effect */
+.neon-keyword {
+  background: linear-gradient(135deg, var(--neon-teal), var(--neon-cyan-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 8px var(--neon-teal-glow);
+  font-weight: 600;
+}
+
+/* Section title styles */
+.section-title {
+  font-family: var(--font-heading);
+  font-weight: var(--title-font-weight);
+  letter-spacing: var(--title-letter-spacing);
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.gradient-text-teal-blue {
+  background: var(--title-gradient-teal-blue);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-blue-cyan-blue {
+  background: var(--title-gradient-blue-cyan-blue);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-teal-cyan-blue {
+  background: var(--title-gradient-teal-cyan-blue);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #fff;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  margin-bottom: 1.5rem;
+  text-shadow: var(--text-glow-teal);
+}
+
+h2 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 1.5rem;
+  text-shadow: var(--text-glow-blue);
+}
+
+h3 {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin-bottom: 1rem;
+  text-shadow: var(--text-glow-cyan-blue);
+}
+
+h4 {
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  margin-bottom: 1rem;
+  text-shadow: var(--text-glow-teal);
+}
+
+p {
+  font-size: 1.05rem;
+  margin-bottom: 1.5rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+.highlight-teal {
+  color: var(--neon-teal);
+  text-shadow: var(--text-glow-teal);
+}
+
+.highlight-blue {
+  color: var(--neon-blue);
+  text-shadow: var(--text-glow-blue);
+}
+
+.highlight-cyan-blue {
+  color: var(--neon-cyan-blue);
+  text-shadow: var(--text-glow-cyan-blue);
+}
+
+/* Add hover effect for interactive highlights */
+.highlight-interactive:hover {
+  filter: brightness(1.2); /* Make it slightly brighter */
+  text-shadow: 0 0 12px rgba(0, 210, 150, 0.6); /* Enhance glow slightly */
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 2.2rem;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  background: rgba(15, 23, 42, 0.75);
+  color: white;
+  border: var(--neon-border-teal);
+  box-shadow: var(--neon-glow-teal);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15), 0 0 16px rgba(0, 210, 150, 0.25);
+  border-color: rgba(0, 210, 150, 0.5);
+}
+
+.btn:active,
+.primary-button:active,
+button:active {
+  transform: translateY(1px) scale(0.98);
+  filter: brightness(0.95);
+}
+
+.btn-primary {
+  background: rgba(0, 210, 150, 0.1);
+  color: var(--neon-teal);
+  border: var(--neon-border-teal);
+  box-shadow: var(--neon-glow-teal);
+}
+
+.btn-secondary {
+  background: rgba(30, 144, 255, 0.1);
+  color: var(--neon-blue);
+  border: var(--neon-border-blue);
+  box-shadow: var(--neon-glow-blue);
+}
+
+.btn-accent {
+  background: rgba(0, 220, 255, 0.1);
+  color: var(--neon-cyan-blue);
+  border: var(--neon-border-cyan-blue);
+  box-shadow: var(--neon-glow-cyan-blue);
+}
+
+/* Improved animation for subtle pulsing */
+@keyframes subtlePulse {
+  0% {
+    opacity: 0.85;
+    transform: scale(0.99);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.85;
+    transform: scale(0.99);
+  }
+}
+
+@keyframes subtle-pulse-delayed {
+  0%, 100% { opacity: 0.2; transform: scale(0.98); }
+  50% { opacity: 0.3; transform: scale(1); }
+}
+
+@keyframes border-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-subtle-pulse {
+  animation: subtlePulse 8s ease-in-out infinite;
+}
+
+.animate-subtle-pulse-delayed {
+  animation: subtle-pulse-delayed 8s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.animate-border-flow {
+  background-size: 200% 200%;
+  animation: border-flow 4s linear infinite;
+}
+
+.neon-border {
+  border: 1px solid transparent;
+  background: linear-gradient(var(--dark-bg), var(--dark-bg)) padding-box,
+              linear-gradient(90deg, var(--neon-teal), var(--neon-blue), var(--neon-cyan-blue), var(--neon-teal)) border-box;
+  background-size: 300% 100%;
+  animation: border-flow 8s ease infinite;
+  transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+}
+
+.subtle-glow {
+  box-shadow: 0 0 15px rgba(120, 60, 220, 0.15);
+  transition: box-shadow var(--transition-medium);
+}
+
+.subtle-glow:hover {
+  box-shadow: 0 0 25px rgba(120, 60, 220, 0.25);
+}
+
+/* Modern scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(10, 15, 31, 0.8);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 210, 150, 0.7);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 210, 150, 0.3);
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-teal);
+}
+
+/* Add focus styles for better accessibility */
+:focus-visible {
+  outline: 2px solid var(--neon-teal);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(0, 210, 150, 0.2);
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Add smooth transitions for all interactive elements */
+a, button, input, select, textarea {
+  transition: all var(--transition-medium);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #FFFFFF;
+    background-color: #121212;
+  }
+}
