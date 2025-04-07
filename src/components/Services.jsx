@@ -505,10 +505,18 @@ const LearnMoreLink = styled.a`
 `;
 
 const Services = () => {
-  const { scrollYProgress } = useScroll();
-  const titleY = useTransform(scrollYProgress, [0, 0.3], [0, -30]);
-  const cardY = useTransform(scrollYProgress, [0.1, 0.6], [50, -50]);
-  const imageScale = useTransform(scrollYProgress, [0.1, 0.6], [1, 1.1]);
+  // Use a single scroll progress tracker with better options
+  const { scrollYProgress } = useScroll({
+    // Smoother updates with offset
+    offset: ["start end", "end start"],
+    // Reduce jank by using the viewport as the target
+    target: typeof document !== 'undefined' ? document.documentElement : undefined
+  });
+  
+  // Use more consistent scroll ranges and smoother values
+  const titleY = useTransform(scrollYProgress, [0, 0.3], [0, -25]);
+  const cardY = useTransform(scrollYProgress, [0.1, 0.5], [30, -30]);
+  const imageScale = useTransform(scrollYProgress, [0.1, 0.5], [1, 1.08]);
   
   return (
     <>
@@ -521,14 +529,16 @@ const Services = () => {
             $opacity={0.4} 
             style={{ top: '15%', right: '10%' }} 
             animate={{ 
-              x: [0, -40, 0], 
-              y: [0, 30, 0],
-              rotate: [0, -3, 0]
+              x: [0, -30, 0], 
+              y: [0, 25, 0],
+              rotate: [0, -2, 0]
             }} 
             transition={{ 
-              duration: 22, 
+              duration: 25, 
               repeat: Infinity, 
-              ease: "easeInOut" 
+              ease: "easeInOut",
+              // Add this to reduce CPU usage
+              type: "tween"
             }}
           />
           <ParallaxOrb 
@@ -538,26 +548,27 @@ const Services = () => {
             $opacity={0.35} 
             style={{ bottom: '25%', left: '5%' }} 
             animate={{ 
-              x: [0, 30, 0], 
-              y: [0, -40, 0],
-              rotate: [0, 5, 0]
+              x: [0, 25, 0], 
+              y: [0, -30, 0],
+              rotate: [0, 3, 0]
             }} 
             transition={{ 
-              duration: 20, 
+              duration: 28, 
               repeat: Infinity, 
               ease: "easeInOut",
-              delay: 1.5
+              delay: 1.5,
+              // Add this to reduce CPU usage
+              type: "tween"
             }}
           />
         </ParallaxContainer>
         <ServicesGradients />
         <SectionContainer>
           <div style={{ position: 'relative' }}>
-            <ParallaxText scrollFactor={-0.1}>
-              <motion.div style={{ y: titleY }}>
-                <SectionTitle className="section-title">Our <span className="highlight">Services</span></SectionTitle>
-              </motion.div>
-            </ParallaxText>
+            {/* Simplified nesting to reduce redundant animations */}
+            <motion.div style={{ y: titleY }}>
+              <SectionTitle className="section-title">Our <span className="highlight">Services</span></SectionTitle>
+            </motion.div>
             
             <motion.div style={{ y: cardY }}>
               <MainServiceCard>
