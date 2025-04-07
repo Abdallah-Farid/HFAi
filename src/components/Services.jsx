@@ -5,6 +5,11 @@ import styled from 'styled-components';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ParallaxContainer, ParallaxOrb, ParallaxText, ParallaxGrid } from './design/ParallaxElements';
 
+// Import images for proper Vite bundling
+import mainCardImg from '../assets/services_/main card.jpeg';
+import gptAgentsImg from '../assets/services_/gpt agents.jpeg';
+import personalizedLearningImg from '../assets/services_/personlized learning.jpeg';
+
 const ServiceSection = styled.section`
   position: relative;
   padding-top: 5rem;
@@ -562,7 +567,7 @@ const Services = () => {
                     width={920}
                     alt="AI Image Generation"
                     height={730}
-                    src="/src/assets/services_/main card.jpeg"
+                    src={mainCardImg}
                     position="left center"
                   />
                 </motion.div>
@@ -611,7 +616,7 @@ const Services = () => {
               <LeftServiceCard>
                 <CardImageContainer>
                   <ServiceImage
-                    src="/src/assets/services_/gpt agents.jpeg"
+                    src={gptAgentsImg}
                     width={800}
                     height={750}
                     alt="AI Services"
@@ -629,7 +634,7 @@ const Services = () => {
               <TopRightServiceCard>
                 <CardImageContainer>
                   <ServiceImage
-                    src="/src/assets/services_/personlized learning.jpeg"
+                    src={personalizedLearningImg}
                     width={650}
                     height={750}
                     alt="Image Generation"
