@@ -1,6 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+
+// Global scroll options for consistency across components
+const globalScrollOptions = {
+  offset: ["start end", "end start"],
+  // Use the viewport as the target for more consistent scrolling
+  target: typeof document !== 'undefined' ? document.documentElement : undefined
+};
 
 // Parallax container that tracks scroll position
 export const ParallaxContainer = ({ children, className }) => {
@@ -24,38 +31,55 @@ export const FloatingElement = styled(motion.div)`
 
 // Parallax section that applies effects to its children
 export const ParallaxSection = ({ children, intensity = 0.1 }) => {
-  const { scrollYProgress } = useScroll();
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    ...globalScrollOptions,
+    // Use the container as the target for more precise scrolling
+    target: containerRef
+  });
   const [isMobile, setIsMobile] = useState(false);
   
-  // Check if on mobile device
+  // Check if on mobile device with debounced resize handler
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
     
+    // Add debouncing to reduce performance impact
+    let resizeTimer;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(checkMobile, 100);
+    };
+    
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimer);
+    };
   }, []);
 
   // Don't apply parallax effects on mobile
   if (isMobile) {
-    return <>{children}</>;
+    return <div ref={containerRef}>{children}</div>;
   }
   
   return (
-    <div style={{ position: 'relative' }}>
+    <div ref={containerRef} style={{ position: 'relative' }}>
       {React.Children.map(children, (child, i) => {
         if (!React.isValidElement(child)) return child;
         
         // Apply different parallax effects based on element position
+        // Use more consistent ranges and smoother values
         const yOffset = useTransform(
           scrollYProgress, 
-          [0, 1], 
-          [0, i % 2 === 0 ? 100 * intensity : -100 * intensity]
+          [0, 0.5, 1], 
+          [0, i % 2 === 0 ? 50 * intensity : -50 * intensity, i % 2 === 0 ? 100 * intensity : -100 * intensity]
         );
         
-        const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 };
+        // Smoother spring config
+        const springConfig = { stiffness: 80, damping: 25, restDelta: 0.001 };
         const yOffsetSpring = useSpring(yOffset, springConfig);
         
         return React.cloneElement(child, {
@@ -71,12 +95,29 @@ export const ParallaxSection = ({ children, intensity = 0.1 }) => {
 
 // Parallax background element
 export const ParallaxBackground = ({ children, scrollFactor = 0.15 }) => {
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', `${scrollFactor * 100}%`]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1 + (scrollFactor * 0.2)]);
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    ...globalScrollOptions,
+    target: containerRef
+  });
+  
+  // Add intermediate points for smoother animation
+  const y = useTransform(
+    scrollYProgress, 
+    [0, 0.5, 1], 
+    ['0%', `${scrollFactor * 50}%`, `${scrollFactor * 100}%`]
+  );
+  
+  // Reduce scale change for subtler effect
+  const scale = useTransform(
+    scrollYProgress, 
+    [0, 0.5, 1], 
+    [1, 1 + (scrollFactor * 0.1), 1 + (scrollFactor * 0.18)]
+  );
   
   return (
     <motion.div
+      ref={containerRef}
       style={{
         position: 'absolute',
         top: 0,
@@ -85,7 +126,8 @@ export const ParallaxBackground = ({ children, scrollFactor = 0.15 }) => {
         bottom: 0,
         zIndex: 0,
         y,
-        scale
+        scale,
+        willChange: 'transform' // Hint to browser for optimization
       }}
     >
       {children}
@@ -104,15 +146,30 @@ export const ParallaxOrb = styled(FloatingElement)`
 
 // Parallax text that moves at a different rate than the background
 export const ParallaxText = ({ children, scrollFactor = 0.1, ...props }) => {
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', `${scrollFactor * 100}%`]);
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    ...globalScrollOptions,
+    target: containerRef
+  });
+  
+  // Add intermediate points for smoother animation
+  const y = useTransform(
+    scrollYProgress, 
+    [0, 0.5, 1], 
+    ['0%', `${scrollFactor * 50}%`, `${scrollFactor * 100}%`]
+  );
+  
+  // Apply spring for smoother motion
+  const springY = useSpring(y, { stiffness: 80, damping: 25 });
   
   return (
     <motion.div
+      ref={containerRef}
       style={{
-        y,
+        y: springY, // Use spring for smoother motion
         position: 'relative',
-        zIndex: 2
+        zIndex: 2,
+        willChange: 'transform' // Hint to browser for optimization
       }}
       {...props}
     >
@@ -123,28 +180,40 @@ export const ParallaxText = ({ children, scrollFactor = 0.1, ...props }) => {
 
 // Parallax grid that creates a subtle depth effect
 export const ParallaxGrid = ({ children, columns = 2, intensity = 0.05 }) => {
-  const { scrollYProgress } = useScroll();
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    ...globalScrollOptions,
+    target: containerRef
+  });
   
   return (
-    <div style={{ 
-      display: 'grid', 
-      gridTemplateColumns: `repeat(${columns}, 1fr)`,
-      gap: '2rem',
-      position: 'relative'
-    }}>
+    <div 
+      ref={containerRef}
+      style={{ 
+        display: 'grid', 
+        gridTemplateColumns: `repeat(${columns}, 1fr)`,
+        gap: '2rem',
+        position: 'relative'
+      }}
+    >
       {React.Children.map(children, (child, i) => {
         if (!React.isValidElement(child)) return child;
         
+        // Add intermediate points for smoother animation
         const yOffset = useTransform(
           scrollYProgress, 
-          [0, 1], 
-          [0, (i % 2 === 0 ? 1 : -1) * 50 * intensity]
+          [0, 0.5, 1], 
+          [0, (i % 2 === 0 ? 1 : -1) * 25 * intensity, (i % 2 === 0 ? 1 : -1) * 50 * intensity]
         );
+        
+        // Apply spring for smoother motion
+        const springY = useSpring(yOffset, { stiffness: 80, damping: 25 });
         
         return React.cloneElement(child, {
           style: {
             ...child.props.style,
-            y: yOffset
+            y: springY, // Use spring for smoother motion
+            willChange: 'transform' // Hint to browser for optimization
           }
         });
       })}
